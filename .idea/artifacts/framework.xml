@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="framework">
+    <output-path>$USER_HOME$/Downloads/nukkit/plugins</output-path>
+    <root id="archive" name="framework.jar">
+      <element id="module-output" name="nukkit_mariataframework" />
+      <element id="file-copy" path="$USER_HOME$/Downloads/nukkit/plugins/plugin.yml" />
+    </root>
+  </artifact>
+</component>
