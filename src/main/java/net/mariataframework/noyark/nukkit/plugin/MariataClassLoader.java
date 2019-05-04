@@ -1,8 +1,13 @@
-package net.mariataframework.noyark.nukkit;
+package net.mariataframework.noyark.nukkit.plugin;
 
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
+import net.mariataframework.noyark.nukkit.utils.Message;
+import net.mariataframework.noyark.nukkit.manager.OamlManager;
+import net.mariataframework.noyark.nukkit.manager.PluginManager;
+import net.mariataframework.noyark.nukkit.utils.UnJar;
 import net.mariataframework.noyark.nukkit.exception.NoConfigException;
+import net.mariataframework.noyark.nukkit.vo.MariataOmlVO;
 
 import java.io.File;
 import java.io.InputStream;
@@ -25,15 +30,11 @@ public class MariataClassLoader {
         return mcl;
     }
 
-    public void loadPlugin(File file, PluginBase base,PluginManager manager) throws Exception{
+    public void loadPlugin(File file, PluginBase base, PluginManager manager,boolean loadClass) throws Exception{
         URL xURL = file.toURI().toURL();
-
         URLClassLoader classLoader = new URLClassLoader(new URL[]{xURL});
-
         InputStream in = classLoader.getResourceAsStream("mariata.oml");
-
         if(in == null){
-
             throw new NoConfigException("No config named: mariata.oml");
 
         }
@@ -45,22 +46,11 @@ public class MariataClassLoader {
 
         UnJar.decompress(file.getPath(),dirFile+"/");
 
-        load(in,dirFile,manager,classLoader,name);
-
-        classLoader.close();
-    }
-
-
-    private void load(InputStream in,String dirFile,PluginManager manager,URLClassLoader classLoader,String name) throws Exception{
-
         MariataOmlVO mariataOmlVO = OamlManager.getManager().toDoSet(in);
 
-        for(String rootPackage:mariataOmlVO.getRootPackage()){
-
-            manager.getVos().add(new InstanceVO(rootPackage,dirFile+"/",classLoader,name));
-
+        if(loadClass) {
+            load(mariataOmlVO, dirFile, manager, classLoader, name);
         }
-
         if(!mariataOmlVO.getRootClass().equals("")){
 
             manager.getMainClass().add(classLoader.loadClass(mariataOmlVO.getRootClass()));
@@ -70,6 +60,13 @@ public class MariataClassLoader {
             throw new ClassNotFoundException("no class: main");
 
         }
+        classLoader.close();
+    }
+
+
+    private void load(MariataOmlVO mariataOmlVO,String dirFile,PluginManager manager,URLClassLoader classLoader,String name) throws Exception{
+
+        PluginManager.loadClasses(mariataOmlVO.getRootPackage(),dirFile+"/",classLoader,name);
 
         Message.loading(mariataOmlVO.getPluginName()+" ....",null);
 

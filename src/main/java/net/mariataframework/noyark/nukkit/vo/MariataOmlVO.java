@@ -1,4 +1,6 @@
-package net.mariataframework.noyark.nukkit;
+package net.mariataframework.noyark.nukkit.vo;
+
+import java.util.Arrays;
 
 public class MariataOmlVO {
 
@@ -36,5 +38,14 @@ public class MariataOmlVO {
 
     public void setRootClass(String rootClass) {
         this.rootClass = rootClass;
+    }
+
+    @Override
+    public String toString() {
+        return "MariataOmlVO{" +
+                "pluginName='" + pluginName + '\'' +
+                ", rootPackage=" + Arrays.toString(rootPackage) +
+                ", rootClass='" + rootClass + '\'' +
+                '}';
     }
 }

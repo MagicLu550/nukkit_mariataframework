@@ -1,4 +1,4 @@
-package net.mariataframework.noyark.nukkit;
+package net.mariataframework.noyark.nukkit.utils;
 
 public class Message {
 

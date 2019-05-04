@@ -1,11 +1,13 @@
-package net.mariataframework.noyark.nukkit;
+package net.mariataframework.noyark.nukkit.manager;
 
 
 import cn.nukkit.plugin.PluginBase;
-
+import net.mariataframework.noyark.nukkit.utils.ReflectSet;
+import net.mariataframework.noyark.nukkit.plugin.MariataClassLoader;
 
 
 import java.io.File;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +27,9 @@ public class PluginManager {
 
     private static final List<Class<?>> mainClass = new ArrayList<>();
 
-    private static final List<InstanceVO> vos = new ArrayList<>();
 
 
-    public static void start(PluginBase base) throws Exception{
+    public static void start(PluginBase base,boolean loadClass) throws Exception{
 
         File dataFolder = new File(base.getDataFolder()+"/plugin");
         if(!dataFolder.exists()){
@@ -38,7 +39,7 @@ public class PluginManager {
         if(jarFile!=null){
             for(File file:jarFile){
                 if(file.getName().endsWith(".jar")){
-                   getManager().loadingPlugins(file,base);
+                   getManager().loadingPlugins(file,base,loadClass);
                 }
             }
         }
@@ -48,10 +49,9 @@ public class PluginManager {
         return manager;
     }
 
-    public static void loadClasses() {
-        for (InstanceVO vo : vos) {
-            new ReflectSet(vo.getRootPackage(), vo.getDirFile()).loadAnnotation(vo.getClassLoader(), vo.getName());
-        }
+    public static void loadClasses(String[] rootPackage, String dirFile, URLClassLoader loader, String name) {
+
+        new ReflectSet(rootPackage, dirFile).loadAnnotation(loader, name);
     }
 
     public List<String> getJars(){
@@ -67,11 +67,8 @@ public class PluginManager {
         return mainClass;
     }
 
-    public List<InstanceVO> getVos(){
-        return vos;
-    }
 
-    private void loadingPlugins(File file,PluginBase base) throws Exception{
-        MariataClassLoader.getClassLoader().loadPlugin(file,base,this);
+    private void loadingPlugins(File file,PluginBase base,boolean loadClass) throws Exception{
+        MariataClassLoader.getClassLoader().loadPlugin(file,base,this,loadClass);
     }
 }

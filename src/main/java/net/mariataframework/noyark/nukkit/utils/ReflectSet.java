@@ -13,12 +13,13 @@
  *		 ****************************************************
  * 
  */
-package net.mariataframework.noyark.nukkit;
+package net.mariataframework.noyark.nukkit.utils;
 
 
 
 import cn.nukkit.command.Command;
 import cn.nukkit.event.Listener;
+import net.mariataframework.noyark.nukkit.core.FrameworkCore;
 import net.mariataframework.noyark.nukkit.exception.NotImplementListenerException;
 
 import java.io.File;
@@ -47,7 +48,7 @@ import java.util.List;
 public class ReflectSet {
 
 	/** the package file*/
-	private String packageFile;
+	private String[] packageFiles;
 	/** usually is 'this' */
 	private String classpath;
 	
@@ -61,8 +62,8 @@ public class ReflectSet {
 	 * @param classpath the classpath
 	 */
 	
-	public ReflectSet(String packageFile, String classpath) {
-		this.packageFile = packageFile;
+	public ReflectSet(String[] packageFiles, String classpath) {
+		this.packageFiles = packageFiles;
 		this.classpath = classpath;
 	}
 	
@@ -91,33 +92,35 @@ public class ReflectSet {
 	 * @throws InstantiationException
 	 */
 	private void scanPackage(URLClassLoader loader,String name) throws IllegalArgumentException, IllegalAccessException,ClassNotFoundException, InstantiationException,NotImplementListenerException{
-		String classPath = classpath;
-		String packagePath = classPath+packageFile.replaceAll("\\.","/");
-		File file = new File(packagePath);
-		List<File> fileName = loadClass(file);
-		for(File fn:fileName) {
-			File[] fs = fn.listFiles();
-			if(fs==null&&fn.isFile()){
-				fs = new File[1];
-				fs[0] = fn;
-			}
-			if(fs!=null) {
-				for(File f1:fs) {
-					if(f1.getName().endsWith(".class")) {
-						String classpath = f1.getPath();
-						classpath = classpath.substring(classpath.indexOf("classes")+"classes".length()+1,classpath.indexOf(".class")).replaceAll("/",".");
-						Class<?> clz = loader.loadClass(classpath.substring(classPath.indexOf("mariataframework")+("mariataframework"+name).length()+2));
-
-						Object obj = clz.newInstance();
-						Message.loading(obj.getClass().getName(),Listener.class);
-						if(obj instanceof Listener){
-							FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener) obj,FrameworkCore.getInstance());
-						}
-						if(obj instanceof Command){
-							try{
-								FrameworkCore.getInstance().getServer().getCommandMap().register(clz.getDeclaredMethod("setPrefix").toString(),(Command)obj);
-							}catch (NoSuchMethodException e){
-								FrameworkCore.getInstance().getServer().getCommandMap().register("",(Command)obj);
+	    String classPath = classpath;
+		for(String packageFile:packageFiles){
+			String packagePath = classPath+packageFile.replaceAll("\\.","/");
+			File file = new File(packagePath);
+			List<File> fileName = loadClass(file);
+			for(File fn:fileName) {
+				File[] fs = fn.listFiles();
+				if(fs==null&&fn.isFile()){
+					fs = new File[1];
+					fs[0] = fn;
+				}
+				if(fs!=null) {
+					for(File f1:fs) {
+						if(f1.getName().endsWith(".class")) {
+							String classpath = f1.getPath();
+							classpath = classpath.substring(classpath.indexOf("classes")+"classes".length()+1,classpath.indexOf(".class")).replaceAll("/",".");
+							String real = classpath.substring(classPath.indexOf("mariataframework")+("mariataframework"+name).length()+2).trim();
+							Class<?> clz = loader.loadClass(real);
+							Object obj = clz.newInstance();
+							Message.loading(obj.getClass().getName(),obj.getClass());
+							if(obj instanceof Listener){
+								FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener) obj,FrameworkCore.getInstance());
+							}
+							if(obj instanceof Command){
+								try{
+									FrameworkCore.getInstance().getServer().getCommandMap().register(clz.getDeclaredMethod("setPrefix").toString(),(Command)obj);
+								}catch (NoSuchMethodException e){
+									FrameworkCore.getInstance().getServer().getCommandMap().register("",(Command)obj);
+								}
 							}
 						}
 					}

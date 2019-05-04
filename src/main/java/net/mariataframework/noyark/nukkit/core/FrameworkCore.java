@@ -1,6 +1,9 @@
-package net.mariataframework.noyark.nukkit;
+package net.mariataframework.noyark.nukkit.core;
 
 import cn.nukkit.plugin.PluginBase;
+import net.mariataframework.noyark.nukkit.manager.PluginManager;
+import net.mariataframework.noyark.nukkit.utils.Message;
+import net.mariataframework.noyark.nukkit.utils.UnJar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,35 +23,33 @@ public class FrameworkCore extends PluginBase {
 
     @Override
     public void onLoad() {
-        try{
-            frameworkCore = this;
-            PluginManager.start(this);
-            for(Class<?> clz: PluginManager.getMainClass()){
-                Object o = clz.newInstance();
-                if(o instanceof PluginBase) {
-                    pluginInstance.add((PluginBase)o);
-                }
-            }
-            for(PluginBase base:pluginInstance){
-                base.getClass().getMethod("onLoad").invoke(base);
-            }
-        }catch (Exception e){
-        }
-    }
 
+    }
+    //TODO 暂时还没解决OnLoad方法问题，待解决方案
+    //在第一次加载时保留ClassLoader，第二次调用后再释放
     @Override
     public void onEnable(){
         try{
-
+            try{
+                frameworkCore = this;
+                PluginManager.start(this,true);
+                for(Class<?> clz: PluginManager.getManager().getMainClass()){
+                    Object o = clz.newInstance();
+                    if(o instanceof PluginBase) {
+                        pluginInstance.add((PluginBase)o);
+                    }
+                }
+                for(PluginBase base:pluginInstance){
+                    base.getClass().getMethod("onLoad").invoke(base);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             int start = 0;
             for(PluginBase base:pluginInstance){
-                base.init(this.getPluginLoader(),this.getServer(),this.getDescription(),new File(this.getDataFolder()+"/"+ PluginManager.getPlugins().get(start)),this.getFile());
+                base.init(this.getPluginLoader(),this.getServer(),this.getDescription(),new File(this.getDataFolder()+"/"+ PluginManager.getManager().getPlugins().get(start)),this.getFile());
                 start++;
             }
-
-            PluginManager.loadClasses();
-
-
             for(PluginBase base:pluginInstance){
                 base.getClass().getMethod("onEnable").invoke(base);
             }
@@ -64,7 +65,7 @@ public class FrameworkCore extends PluginBase {
                 base.getClass().getMethod("onDisable").invoke(base);
             }
             Message.end();
-            List<String> jars = PluginManager.getJars();
+            List<String> jars = PluginManager.getManager().getJars();
             for(String jar:jars){
                 UnJar.clean(jar);
             }

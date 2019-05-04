@@ -1,5 +1,6 @@
-package net.mariataframework.noyark.nukkit;
+package net.mariataframework.noyark.nukkit.manager;
 
+import net.mariataframework.noyark.nukkit.vo.MariataOmlVO;
 import net.noyark.oaml.OamlReader;
 import net.noyark.oaml.tree.Document;
 import net.noyark.oaml.tree.Node;
