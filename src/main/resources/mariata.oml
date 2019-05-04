@@ -1,6 +1,0 @@
-#插件名
-name: mariata
-#根包名
-package: net
-#main-class 如果没有可以不写，实现MariataStart接口的类
-main-class:

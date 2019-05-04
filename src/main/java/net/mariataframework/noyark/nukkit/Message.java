@@ -17,7 +17,6 @@ public class Message {
         println("loading "+message+": "+(clz==null?"":clz.getSimpleName()));
     }
 
-
     public static void end(){
         println("plugin is end");
         println("un the jar file");

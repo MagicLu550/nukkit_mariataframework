@@ -119,7 +119,6 @@ public class ReflectSet {
 							}catch (NoSuchMethodException e){
 								FrameworkCore.getInstance().getServer().getCommandMap().register("",(Command)obj);
 							}
-
 						}
 					}
 				}

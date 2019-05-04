@@ -11,8 +11,6 @@ import java.util.List;
  *
  * marita-framework是一款基于Nukkit的解藕框架，该框架可以
  * 控制反转的创建javabean对象，不需要开发者手动创建一些对象
- * ListenerHandler注解：标记这是个监听器
- * CommandHandler注解: 标记这是个指令
  */
 public class FrameworkCore extends PluginBase {
 
@@ -22,28 +20,35 @@ public class FrameworkCore extends PluginBase {
 
     @Override
     public void onLoad() {
-        frameworkCore = this;
-
-    }
-
-    @Override
-    public void onEnable(){
         try{
-            MariataClassLoader.start(this);
-            for(Class<?> clz:MariataClassLoader.getMainClass()){
+            frameworkCore = this;
+            PluginManager.start(this);
+            for(Class<?> clz: PluginManager.getMainClass()){
                 Object o = clz.newInstance();
                 if(o instanceof PluginBase) {
                     pluginInstance.add((PluginBase)o);
                 }
             }
+            for(PluginBase base:pluginInstance){
+                base.getClass().getMethod("onLoad").invoke(base);
+            }
+        }catch (Exception e){
+        }
+    }
+
+    @Override
+    public void onEnable(){
+        try{
+
             int start = 0;
             for(PluginBase base:pluginInstance){
-                base.init(this.getPluginLoader(),this.getServer(),this.getDescription(),new File(this.getDataFolder()+"/"+MariataClassLoader.getPlugins().get(start)),this.getFile());
+                base.init(this.getPluginLoader(),this.getServer(),this.getDescription(),new File(this.getDataFolder()+"/"+ PluginManager.getPlugins().get(start)),this.getFile());
                 start++;
             }
-            for(PluginBase base:pluginInstance){
-               base.getClass().getMethod("onLoad").invoke(base);
-            }
+
+            PluginManager.loadClasses();
+
+
             for(PluginBase base:pluginInstance){
                 base.getClass().getMethod("onEnable").invoke(base);
             }
@@ -59,7 +64,7 @@ public class FrameworkCore extends PluginBase {
                 base.getClass().getMethod("onDisable").invoke(base);
             }
             Message.end();
-            List<String> jars = MariataClassLoader.getJars();
+            List<String> jars = PluginManager.getJars();
             for(String jar:jars){
                 UnJar.clean(jar);
             }
