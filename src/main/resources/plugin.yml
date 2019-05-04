@@ -4,4 +4,5 @@ main: net.mariataframework.noyark.nukkit.FrameworkCore
 api: ["1.0.8"]
 description: The nukkit framework
 author: magiclu550
-
+loadbefore:
+  - mariataapis

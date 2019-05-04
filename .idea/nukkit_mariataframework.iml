@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="nukkit" level="project" />
+    <orderEntry type="library" name="apis" level="project" />
   </component>
 </module>

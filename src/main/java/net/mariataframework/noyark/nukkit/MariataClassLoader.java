@@ -2,6 +2,7 @@ package net.mariataframework.noyark.nukkit;
 
 
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
 import net.mariataframework.noyark.nukkit.exception.NoConfigException;
 import net.noyark.oaml.OamlReader;
@@ -25,6 +26,7 @@ public class MariataClassLoader {
 
     private static final List<Class<?>> mainClass = new ArrayList<>();
 
+    private static final Logger logger = FrameworkCore.getInstance().getLogger();
 
     public static void start(PluginBase base) throws Exception{
 
@@ -59,10 +61,12 @@ public class MariataClassLoader {
                     }
                     Message.loading(pluginName+" ....",null);
                     plugins.add(TextFormat.GREEN+pluginName);
+                    classLoader.close();
                 }
             }
         }
     }
+
 
     public static List<String> getJars(){
         return jars;

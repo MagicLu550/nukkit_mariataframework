@@ -4,6 +4,7 @@
     <root id="archive" name="framework.jar">
       <element id="module-output" name="nukkit_mariataframework" />
       <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
+      <element id="file-copy" path="$PROJECT_DIR$/pom.xml" />
     </root>
   </artifact>
 </component>
