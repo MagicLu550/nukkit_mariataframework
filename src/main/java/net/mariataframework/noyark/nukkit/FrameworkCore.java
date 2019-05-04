@@ -1,6 +1,13 @@
 package net.mariataframework.noyark.nukkit;
 
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.plugin.PluginLogger;
+
+import java.io.File;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -14,24 +21,55 @@ public class FrameworkCore extends PluginBase {
 
     private static FrameworkCore frameworkCore;
 
-    static{
-        frameworkCore = new FrameworkCore();
-    }
+    private static List<PluginBase> pluginInstance = new ArrayList<>();
 
     @Override
     public void onLoad() {
+        frameworkCore = this;
+
+    }
+
+    @Override
+    public void onEnable(){
         try{
-            Message.start();
-            MariataClassLoader.start();
+            MariataClassLoader.start(this);
+            for(Class<?> clz:MariataClassLoader.getMainClass()){
+                Object o = clz.newInstance();
+                if(o instanceof PluginBase) {
+                    pluginInstance.add((PluginBase)o);
+                }
+            }
+            int start = 0;
+            for(PluginBase base:pluginInstance){
+                base.init(this.getPluginLoader(),this.getServer(),this.getDescription(),new File(this.getDataFolder()+"/"+MariataClassLoader.getPlugins().get(start)),this.getFile());
+                start++;
+            }
+            for(PluginBase base:pluginInstance){
+               base.getClass().getMethod("onLoad").invoke(base);
+            }
+            for(PluginBase base:pluginInstance){
+                base.getClass().getMethod("onEnable").invoke(base);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
     }
+
     @Override
     public void onDisable() {
-        Message.end();
+        try{
+            for(PluginBase base:pluginInstance){
+                base.getClass().getMethod("onDisable").invoke(base);
+            }
+            Message.end();
+            List<String> jars = MariataClassLoader.getJars();
+            for(String jar:jars){
+                UnJar.clean(jar);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
-
     public static FrameworkCore getInstance(){
         return frameworkCore;
     }

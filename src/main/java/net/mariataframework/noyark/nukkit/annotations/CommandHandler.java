@@ -7,7 +7,8 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 
 @Target({TYPE})
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
+
 public @interface CommandHandler {
 
     String fallbackPrefix();

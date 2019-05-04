@@ -19,7 +19,6 @@ package net.mariataframework.noyark.nukkit;
 
 import cn.nukkit.command.Command;
 import cn.nukkit.event.Listener;
-import cn.nukkit.plugin.PluginBase;
 import net.mariataframework.noyark.nukkit.annotations.CommandHandler;
 import net.mariataframework.noyark.nukkit.annotations.ListenerHandler;
 import net.mariataframework.noyark.nukkit.exception.NotImplementCommandException;
@@ -27,6 +26,7 @@ import net.mariataframework.noyark.nukkit.exception.NotImplementListenerExceptio
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,9 +75,9 @@ public class ReflectSet {
 	 * configuration file,and generate a configuration file object
 	 */
 	
-	public void loadAnnotation() {
+	public void loadAnnotation(URLClassLoader loader,String name) {
 		try {
-			scanPackage();
+			scanPackage(loader,name);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -93,50 +93,46 @@ public class ReflectSet {
 	 * @throws ClassNotFoundException
 	 * @throws InstantiationException
 	 */
-	private void scanPackage() throws IllegalArgumentException, IllegalAccessException,ClassNotFoundException, InstantiationException,NotImplementListenerException{
-			String classPath = classpath;
-			String otherPath;
-			if(classPath.indexOf("test-classes")!=-1) {
-				otherPath = classPath.replace("test-classes","classes");
-			}else {
-				otherPath = classPath.replace("classes","test-classes");
+	private void scanPackage(URLClassLoader loader,String name) throws IllegalArgumentException, IllegalAccessException,ClassNotFoundException, InstantiationException,NotImplementListenerException{
+		String classPath = classpath;
+		String packagePath = classPath+packageFile.replaceAll("\\.","/");
+		File file = new File(packagePath);
+		List<File> fileName = loadClass(file);
+		for(File fn:fileName) {
+			File[] fs = fn.listFiles();
+			if(fs==null&&fn.isFile()){
+				fs = new File[1];
+				fs[0] = fn;
 			}
-			String[] allPath = {classPath,otherPath};
-			for(String path:allPath) {
-				String packagePath = path+packageFile.replaceAll("\\.","/");
-				File file = new File(packagePath);
-				List<File> fileName = loadClass(file);
-				for(File fn:fileName) {
-					File[] fs = fn.listFiles();
-					if(fs!=null) {
-						for(File f1:fs) {
-							if(f1.getName().endsWith(".class")) {
-								String classpath = f1.getPath();
-								classpath = classpath.substring(classpath.indexOf("classes")+"classes".length()+1,classpath.indexOf(".class")).replaceAll("/",".");
-								Class<?> clz = Class.forName(classpath);
-								ListenerHandler anno = clz.getDeclaredAnnotation(ListenerHandler.class);
-								Object obj = clz.newInstance();
-								Message.loading(obj.getClass().getName(),Listener.class);
-								if(anno!=null){
-									if(obj instanceof Listener){
-										FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener) obj,FrameworkCore.getInstance());
-									}else{
-										throw new NotImplementListenerException("this class is not Listener");
-									}
-								}
-								CommandHandler anno1 = clz.getDeclaredAnnotation(CommandHandler.class);
-								if(anno1!=null){
-									if(obj instanceof Command){
-										FrameworkCore.getInstance().getServer().getCommandMap().register(anno1.fallbackPrefix(),(Command) obj);
-									}else{
-										throw new NotImplementCommandException("this class is not command");
-									}
-								}
+			if(fs!=null) {
+				for(File f1:fs) {
+					if(f1.getName().endsWith(".class")) {
+						String classpath = f1.getPath();
+						classpath = classpath.substring(classpath.indexOf("classes")+"classes".length()+1,classpath.indexOf(".class")).replaceAll("/",".");
+						Class<?> clz = loader.loadClass(classpath.substring(classPath.indexOf("mariataframework")+("mariataframework"+name).length()+2));
+						ListenerHandler anno = clz.getDeclaredAnnotation(ListenerHandler.class);
+						Object obj = clz.newInstance();
+						Message.loading(obj.getClass().getName(),Listener.class);
+						if(anno!=null||(obj instanceof Listener)){
+							if(obj instanceof Listener){
+								FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener) obj,FrameworkCore.getInstance());
+							}else{
+								throw new NotImplementListenerException("this class is not Listener");
+							}
+						}
+
+						CommandHandler anno1 = clz.getDeclaredAnnotation(CommandHandler.class);
+						if(anno1!=null){
+							if(obj instanceof Command){
+								FrameworkCore.getInstance().getServer().getCommandMap().register(anno1.fallbackPrefix(),(Command) obj);
+							}else{
+								throw new NotImplementCommandException("this class is not command");
 							}
 						}
 					}
 				}
 			}
+		}
 	}
 	
 	/**
@@ -146,15 +142,9 @@ public class ReflectSet {
 	 */
 	
 	private List<File> loadClass(File file) {
+
 		List<File> allFiles = new ArrayList<File>();
 		File[] files = file.listFiles();
-		if(files!=null) {
-			for(File f:files) {
-				if(f.getName().endsWith(".class")) {
-					allFiles.add(f);
-				}
-			}
-		}
 		searchFile(files, allFiles);
 		return allFiles;
 	}
@@ -172,6 +162,9 @@ public class ReflectSet {
 					allFiles.add(f);
 					File[] files2 = f.listFiles();
 					searchFile(files2, allFiles);
+				}else
+				if(f.getName().endsWith(".class")) {
+					allFiles.add(f);
 				}
 			}
 		}

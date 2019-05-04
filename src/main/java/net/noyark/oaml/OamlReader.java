@@ -95,7 +95,7 @@ public class OamlReader implements DocumentReader{
 	 * information.This method is an overloaded method.When 
 	 * reading ,you need to specify the file or its corresponding
 	 * stream
-	 * @param inputstream the inputstream
+	 * @param inputStream the inputstream
 	 * @return the document object
 	 * @throws IOException #{@link IOException}
 	 */
@@ -110,7 +110,7 @@ public class OamlReader implements DocumentReader{
 	 * information.This method is an overloaded method.When 
 	 * reading ,you need to specify the file or its corresponding
 	 * stream
-	 * @param reader the reader stream
+	 * @param read the reader stream
 	 * @return the document object
 	 * @throws IOException #{@link IOException}
 	 */

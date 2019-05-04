@@ -29,7 +29,6 @@ import java.lang.annotation.Target;
  * @author magiclu550
  * @since JDk1.8
  * @since Oaml 002
- * @see OamlConfig
  *
  */
 @Target(ElementType.TYPE)
