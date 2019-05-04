@@ -90,7 +90,7 @@ public class ReflectSet {
 	 * @throws ClassNotFoundException
 	 * @throws InstantiationException
 	 */
-	private void scanPackage(URLClassLoader loader,String name) throws NoSuchMethodException,IllegalArgumentException, IllegalAccessException,ClassNotFoundException, InstantiationException,NotImplementListenerException{
+	private void scanPackage(URLClassLoader loader,String name) throws IllegalArgumentException, IllegalAccessException,ClassNotFoundException, InstantiationException,NotImplementListenerException{
 		String classPath = classpath;
 		String packagePath = classPath+packageFile.replaceAll("\\.","/");
 		File file = new File(packagePath);
@@ -114,7 +114,12 @@ public class ReflectSet {
 							FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener) obj,FrameworkCore.getInstance());
 						}
 						if(obj instanceof Command){
-							FrameworkCore.getInstance().getServer().getCommandMap().register(clz.getDeclaredMethod("setPrefix").toString(),(Command)obj);
+							try{
+								FrameworkCore.getInstance().getServer().getCommandMap().register(clz.getDeclaredMethod("setPrefix").toString(),(Command)obj);
+							}catch (NoSuchMethodException e){
+								FrameworkCore.getInstance().getServer().getCommandMap().register("",(Command)obj);
+							}
+
 						}
 					}
 				}
