@@ -35,3 +35,14 @@ main: 主类 继承PluginBase的类
 > oaml的语法结构: https://github.com/noyark-system/noyark_oaml_java
 
 > github: https://github.com/MagicLu550/nukkit_mariataframework
+
+`前置插件的设置`
+
+- 在mariataSet中加入参数:
+  * startbefore
+  ```yaml
+  startbefore:
+    -
+    -
+    -
+  ```
