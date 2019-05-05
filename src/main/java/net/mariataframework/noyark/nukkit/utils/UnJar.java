@@ -88,7 +88,8 @@ public class UnJar {
      */
     private static void makeSupDir(String outFileName) {
 //匹配分隔符
-        Pattern p = Pattern.compile("[/\\\\" + File.separator + "]");
+        String sep = File.separator.replaceAll("\\\\","/");
+        Pattern p = Pattern.compile("[/\\\\" + sep + "]");
         Matcher m = p.matcher(outFileName);
 //每找到一个匹配的分隔符，则创建一个该分隔符以前的目录
         while (m.find()) {

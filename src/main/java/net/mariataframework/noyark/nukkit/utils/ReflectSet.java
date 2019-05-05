@@ -105,7 +105,7 @@ public class ReflectSet {
 					for(File f1:fs) {
 						if(f1.getName().endsWith(".class")) {
 							String classpath = f1.getPath();
-							classpath = classpath.substring(classpath.indexOf("classes")+"classes".length()+1,classpath.indexOf(".class")).replaceAll("/",".");
+							classpath = classpath.substring(classpath.indexOf("classes")+"classes".length()+1,classpath.indexOf(".class")).replaceAll("/|\\\\",".");
 							String real = classpath.substring(classPath.indexOf("mariataframework")+("mariataframework"+name).length()+2).trim();
 							Class<?> clz = loader.loadClass(real);
 							Object obj = clz.newInstance();
