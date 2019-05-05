@@ -1,5 +1,5 @@
 # nukkit_mariataframework
-nukkit framwork
+`nukkit framwork`
 
 ```
 使用该框架后，如果使用框架提供的全新的插件结构，监听器(实现Listener接口)和命令(继承Command父类)会被框架默认为注册对象
