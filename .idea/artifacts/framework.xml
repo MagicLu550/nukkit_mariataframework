@@ -1,10 +1,11 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="framework">
-    <output-path>$PROJECT_DIR$/../nukkit/plugins</output-path>
+    <output-path>$PROJECT_DIR$/../nk/plugins</output-path>
     <root id="archive" name="framework.jar">
       <element id="module-output" name="nukkit_mariataframework" />
       <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
       <element id="file-copy" path="$PROJECT_DIR$/pom.xml" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/fusesource/jansi/jansi/1.18/jansi-1.18.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

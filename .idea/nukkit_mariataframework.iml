@@ -10,8 +10,8 @@
     </content>
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="nukkit" level="project" />
     <orderEntry type="library" name="apis" level="project" />
     <orderEntry type="library" name="Maven: cn.nukkit:nukkit:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.fusesource.jansi:jansi:1.18" level="project" />
   </component>
 </module>

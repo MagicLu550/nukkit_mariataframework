@@ -1,6 +1,8 @@
 package net.mariataframework.noyark.nukkit.core;
 
+
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.utils.Config;
 import net.mariataframework.noyark.nukkit.manager.PluginManager;
 import net.mariataframework.noyark.nukkit.utils.Message;
 import net.mariataframework.noyark.nukkit.utils.UnJar;
@@ -8,7 +10,6 @@ import net.mariataframework.noyark.nukkit.utils.UnJar;
 import java.io.File;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 
@@ -24,8 +25,19 @@ public class FrameworkCore extends PluginBase {
     private static List<PluginBase> pluginInstance = new ArrayList<>();
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onLoad() {
-
+        //加载前置插件
+        try{
+            String configFileName = this.getDataFolder()+"/mariataSet.yml";
+            Config config = new Config(configFileName,Config.YAML);
+            if(new File(configFileName).exists()){
+                config.save();
+            }
+            List<String> list = config.getList("startbefore");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     //TODO 暂时还没解决OnLoad方法问题，待解决方案
     //在第一次加载时保留ClassLoader，第二次调用后再释放
@@ -34,6 +46,7 @@ public class FrameworkCore extends PluginBase {
         try{
             try{
                 frameworkCore = this;
+                Message.start();
                 PluginManager.start(this,true);
                 for(Class<?> clz: PluginManager.getManager().getMainClass()){
                     Object o = clz.newInstance();

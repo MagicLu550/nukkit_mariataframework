@@ -1,8 +1,6 @@
 <component name="libraryTable">
   <library name="apis">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../nukkit/plugins/apis.jar!/" />
-    </CLASSES>
+    <CLASSES />
     <JAVADOC />
     <SOURCES />
   </library>
