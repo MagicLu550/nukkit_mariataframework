@@ -40,9 +40,9 @@ main: 主类 继承PluginBase的类
 
 - 在mariataSet中加入参数:
   * startbefore
-  ```yaml
-  startbefore:
-    -
-    -
-    -
-  ```
+```yaml
+startbefore:
+  -
+  -
+  -
+```
