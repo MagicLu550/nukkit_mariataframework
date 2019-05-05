@@ -35,6 +35,9 @@ public class FrameworkCore extends PluginBase {
                 config.save();
             }
             List<String> list = config.getList("startbefore");
+            for(String fileName:list){
+                this.getPluginLoader().loadPlugin(fileName);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
