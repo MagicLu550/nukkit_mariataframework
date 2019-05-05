@@ -47,3 +47,7 @@ startbefore:
  -
  -
 ```
+
+Currently loading plugins with plugin.yml is supported.
+
+The class that inherits the task will be started immediately if you add a public int startNow;
