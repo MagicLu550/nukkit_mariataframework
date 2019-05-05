@@ -10,9 +10,9 @@
     <dependencies>
 
         <dependency>
-            <groupId>cn.nukkit</groupId>
-            <artifactId>nukkit</artifactId>
-            <version>1.0</version>
+            <groupId>net.noyark</groupId>
+            <artifactId>mariata-apis</artifactId>
+            <version>0.0.1</version>
         </dependency>
 
     </dependencies>
