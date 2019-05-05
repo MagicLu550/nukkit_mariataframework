@@ -8,6 +8,7 @@ import net.mariataframework.noyark.nukkit.utils.UnJar;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 

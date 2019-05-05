@@ -56,7 +56,7 @@ public class ReflectSet {
 	 * After the constructor constructs the object,
 	 * the <CODE>loadAnnotation</CODE> method is 
 	 * called to load the configuration file.
-	 * @param packageFile the parent package file
+	 * @param packageFiles the parent package file
 	 * if the config class in the a.b.c.d package,the packageFile
 	 * can be a or a.b or a.b.c or a.b.c.d
 	 * @param classpath the classpath
@@ -73,9 +73,9 @@ public class ReflectSet {
 	 * configuration file,and generate a configuration file object
 	 */
 	
-	public void loadAnnotation(URLClassLoader loader,String name) {
+	public void loadAnnotation(URLClassLoader loader,String name,RefelectCreater creater) {
 		try {
-			scanPackage(loader,name);
+			scanPackage(loader,name,creater);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -91,7 +91,7 @@ public class ReflectSet {
 	 * @throws ClassNotFoundException
 	 * @throws InstantiationException
 	 */
-	private void scanPackage(URLClassLoader loader,String name) throws IllegalArgumentException, IllegalAccessException,ClassNotFoundException, InstantiationException,NotImplementListenerException{
+	private void scanPackage(URLClassLoader loader,String name,RefelectCreater creater) throws IllegalArgumentException, IllegalAccessException,ClassNotFoundException, InstantiationException,NotImplementListenerException{
 	    String classPath = classpath;
 		for(String packageFile:packageFiles){
 			String packagePath = classPath+packageFile.replaceAll("\\.","/");
@@ -111,24 +111,14 @@ public class ReflectSet {
 							String real = classpath.substring(classPath.indexOf("mariataframework")+("mariataframework"+name).length()+2).trim();
 							Class<?> clz = loader.loadClass(real);
 							Object obj = clz.newInstance();
-							Message.loading(obj.getClass().getName(),obj.getClass());
-							if(obj instanceof Listener){
-								FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener) obj,FrameworkCore.getInstance());
-							}
-							if(obj instanceof Command){
-								try{
-									FrameworkCore.getInstance().getServer().getCommandMap().register(clz.getDeclaredMethod("setPrefix").toString(),(Command)obj);
-								}catch (NoSuchMethodException e){
-									FrameworkCore.getInstance().getServer().getCommandMap().register("",(Command)obj);
-								}
-							}
+							creater.create(obj,clz);
 						}
 					}
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * It can get Package and Classes next the root package
 	 * @param file the classpath file

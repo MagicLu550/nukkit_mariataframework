@@ -1,7 +1,11 @@
 package net.mariataframework.noyark.nukkit.manager;
 
 
+import cn.nukkit.command.Command;
+import cn.nukkit.event.Listener;
 import cn.nukkit.plugin.PluginBase;
+import net.mariataframework.noyark.nukkit.core.FrameworkCore;
+import net.mariataframework.noyark.nukkit.utils.Message;
 import net.mariataframework.noyark.nukkit.utils.ReflectSet;
 import net.mariataframework.noyark.nukkit.plugin.MariataClassLoader;
 
@@ -51,7 +55,19 @@ public class PluginManager {
 
     public static void loadClasses(String[] rootPackage, String dirFile, URLClassLoader loader, String name) {
 
-        new ReflectSet(rootPackage, dirFile).loadAnnotation(loader, name);
+        new ReflectSet(rootPackage, dirFile).loadAnnotation(loader, name,(obj,clz)->{
+            Message.loading(obj.getClass().getName(),obj.getClass());
+            if(obj instanceof Listener){
+                FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener) obj,FrameworkCore.getInstance());
+            }
+            if(obj instanceof Command){
+                try{
+                    FrameworkCore.getInstance().getServer().getCommandMap().register(clz.getDeclaredMethod("setPrefix").toString(),(Command)obj);
+                }catch (NoSuchMethodException e){
+                    FrameworkCore.getInstance().getServer().getCommandMap().register("",(Command)obj);
+                }
+            }
+        });
     }
 
     public List<String> getJars(){
