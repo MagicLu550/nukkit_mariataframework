@@ -31,4 +31,5 @@ package: 根目录包
 main: 主类 继承PluginBase的类
 ```
 > oaml的语法结构: https://github.com/noyark-system/noyark_oaml_java
+
 > github: https://github.com/MagicLu550/nukkit_mariataframework
