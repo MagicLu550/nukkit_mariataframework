@@ -1,3 +1,5 @@
+![LICENSE](https://img.shields.io/badge/license-GPL-blue.svg)
+
 # nukkit_mariataframework
 `nukkit framwork`
 
