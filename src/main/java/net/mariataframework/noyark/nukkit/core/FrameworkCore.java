@@ -4,6 +4,7 @@ package net.mariataframework.noyark.nukkit.core;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import net.mariataframework.noyark.nukkit.manager.PluginManager;
+import net.mariataframework.noyark.nukkit.plugin.MariataClassLoader;
 import net.mariataframework.noyark.nukkit.utils.Message;
 import net.mariataframework.noyark.nukkit.utils.UnJar;
 
@@ -29,6 +30,16 @@ public class FrameworkCore extends PluginBase {
     public void onLoad() {
         //加载前置插件
         try{
+            File depend = new File(this.getDataFolder()+"/depend/");
+            if(!depend.exists()){
+                depend.mkdirs();
+            }
+            File[] files = depend.listFiles();
+            if(files!=null){
+                for(File file:files){
+                    this.getPluginLoader().loadPlugin(file);
+                }
+            }
             String configFileName = this.getDataFolder()+"/mariataSet.yml";
             Config config = new Config(configFileName,Config.YAML);
             if(new File(configFileName).exists()){

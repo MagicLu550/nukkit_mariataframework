@@ -32,7 +32,7 @@ public class UnJar {
             JarEntry je = (JarEntry) e.nextElement();
             String outFileName = outputPath + je.getName();
             File f = new File(outFileName);
-            Message.println(f.getAbsolutePath());
+
 
 //创建该路径的目录和所有父目录
             makeSupDir(outFileName);
@@ -134,7 +134,6 @@ public class UnJar {
                         File subFile = new File(fileName);
                         clean(path + File.separator + subFile);
                     }
-                    Message.println(file.getAbsolutePath());
 //最后删除父目录
                     file.delete();
 
@@ -143,7 +142,6 @@ public class UnJar {
 //如果是文件，则直接删除
             else
             {
-                Message.println(file.getAbsolutePath());
                 file.delete();
             }
         }
