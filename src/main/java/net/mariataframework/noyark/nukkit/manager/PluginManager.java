@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PluginManager {
+public class PluginManager implements JarManager{
 
     private static PluginManager manager;
 
@@ -25,15 +25,17 @@ public class PluginManager {
     }
 
 
-    private static final List<String> plugins = new ArrayList<>();
+    private final List<String> plugins = new ArrayList<>();
 
-    private static final List<String> jars = new ArrayList<>();
+    private final List<String> jars = new ArrayList<>();
 
-    private static final List<Class<?>> mainClass = new ArrayList<>();
+    private final List<Class<?>> mainClass = new ArrayList<>();
 
+    private PluginManager(){
 
+    }
 
-    public static void start(PluginBase base,boolean loadClass) throws Exception{
+    public void start(PluginBase base,boolean loadClass) throws Exception{
 
         File dataFolder = new File(base.getDataFolder()+"/plugin");
         if(!dataFolder.exists()){
@@ -43,17 +45,17 @@ public class PluginManager {
         if(jarFile!=null){
             for(File file:jarFile){
                 if(file.getName().endsWith(".jar")){
-                   getManager().loadingPlugins(file,base,loadClass);
+                   this.loadingPlugins(file,base,loadClass);
                 }
             }
         }
     }
 
-    public static PluginManager getManager(){
+    public static JarManager getManager(){
         return manager;
     }
 
-    public static void loadClasses(String[] rootPackage, String dirFile, URLClassLoader loader, String name) {
+    public void loadClasses(String[] rootPackage, String dirFile, URLClassLoader loader, String name) {
 
         new ReflectSet(rootPackage, dirFile).loadAnnotation(loader, name,(obj,clz)-> {
             PluginManager.getManager().loadClass(obj,clz);

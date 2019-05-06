@@ -18,7 +18,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 
-public class MariataClassLoader {
+public class MariataClassLoader implements MariataLoader{
 
     private static MariataClassLoader mcl;
 
@@ -30,7 +30,7 @@ public class MariataClassLoader {
 
     }
 
-    public static MariataClassLoader getClassLoader(){
+    public static MariataLoader getClassLoader(){
         return mcl;
     }
 
@@ -90,7 +90,7 @@ public class MariataClassLoader {
 
     private void load(MariataOmlVO mariataOmlVO,String dirFile,PluginManager manager,URLClassLoader classLoader,String name) throws Exception{
 
-        PluginManager.loadClasses(mariataOmlVO.getRootPackage(),dirFile+"/",classLoader,name);
+        PluginManager.getManager().loadClasses(mariataOmlVO.getRootPackage(),dirFile+"/",classLoader,name);
 
         Message.loading(mariataOmlVO.getPluginName()+" ....",null);
 

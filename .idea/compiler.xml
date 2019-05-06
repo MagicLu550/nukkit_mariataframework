@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
-      <module name="nukkit_mariataframework" target="12" />
+      <module name="nukkit_mariataframework" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

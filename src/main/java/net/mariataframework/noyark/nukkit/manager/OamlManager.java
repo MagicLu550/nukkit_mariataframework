@@ -8,7 +8,7 @@ import net.noyark.oaml.tree.Node;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class OamlManager {
+public class OamlManager implements VOManager{
 
 
 
@@ -16,6 +16,10 @@ public class OamlManager {
 
     static {
         manager = new OamlManager();
+    }
+
+    private OamlManager(){
+
     }
 
     public MariataOmlVO toDoSet(InputStream in) throws IOException {
@@ -33,7 +37,7 @@ public class OamlManager {
         return new MariataOmlVO(pluginName,rootPackage,rootClass);
     }
 
-    public static OamlManager getManager(){
+    public static VOManager getManager(){
         return manager;
     }
 }

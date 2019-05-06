@@ -16,13 +16,10 @@
 package net.mariataframework.noyark.nukkit.utils;
 
 
-
-
 import net.mariataframework.noyark.nukkit.exception.NotImplementListenerException;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,8 +104,13 @@ public class ReflectSet {
 							classpath = classpath.substring(classpath.indexOf("classes")+"classes".length()+1,classpath.indexOf(".class")).replaceAll("/|\\\\",".");
 							String real = classpath.substring(classPath.indexOf("mariataframework")+("mariataframework"+name).length()+2).trim();
 							Class<?> clz = loader.loadClass(real);
-							Object obj = clz.newInstance();
-							creater.create(obj,clz);
+							Object obj;
+							try{
+								obj = clz.newInstance();
+								creater.create(obj,clz);
+							}catch (Exception e){
+								Message.println("can not load private constructor");
+							}
 						}
 					}
 				}

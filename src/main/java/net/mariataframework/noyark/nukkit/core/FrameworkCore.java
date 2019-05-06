@@ -63,7 +63,7 @@ public class FrameworkCore extends PluginBase {
             try{
                 frameworkCore = this;
                 Message.start();
-                PluginManager.start(this,true);
+                PluginManager.getManager().start(this,true);
                 for(Class<?> clz: PluginManager.getManager().getMainClass()){
                     Object o = clz.newInstance();
                     if(o instanceof PluginBase) {
