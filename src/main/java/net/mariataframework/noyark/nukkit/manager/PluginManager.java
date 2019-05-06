@@ -114,6 +114,9 @@ public class PluginManager implements JarManager{
         return mainClass;
     }
 
+    public Map<Class<?>,Object> getInstances(){
+        return instances;
+    }
 
     private void loadingPlugins(File file,PluginBase base,boolean loadClass) throws Exception{
         MariataClassLoader.getClassLoader().loadPlugin(file,base,this,loadClass);

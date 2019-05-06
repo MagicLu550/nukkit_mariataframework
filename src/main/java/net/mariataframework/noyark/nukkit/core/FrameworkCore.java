@@ -3,6 +3,7 @@ package net.mariataframework.noyark.nukkit.core;
 
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
+import net.mariataframework.noyark.nukkit.manager.BeanManager;
 import net.mariataframework.noyark.nukkit.manager.PluginManager;
 import net.mariataframework.noyark.nukkit.utils.Message;
 import net.mariataframework.noyark.nukkit.utils.UnJar;
@@ -105,5 +106,9 @@ public class FrameworkCore extends PluginBase {
     }
     public static FrameworkCore getInstance(){
         return frameworkCore;
+    }
+
+    public BeanManager getBeanManager(){
+        return BeanManager.getManager();
     }
 }

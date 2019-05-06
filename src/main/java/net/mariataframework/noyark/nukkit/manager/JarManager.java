@@ -6,6 +6,7 @@ import cn.nukkit.plugin.PluginBase;
 
 import java.net.URLClassLoader;
 import java.util.List;
+import java.util.Map;
 
 public interface JarManager {
     void loadClass(Object obj,Class<?> clz);
@@ -16,6 +17,8 @@ public interface JarManager {
 
 
     List<Class<?>> getMainClass();
+
+    Map<Class<?>,Object> getInstances();
 
     void start(PluginBase base, boolean loadClass) throws Exception;
 
