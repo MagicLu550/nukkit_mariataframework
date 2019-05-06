@@ -51,3 +51,38 @@ startbefore:
 Currently loading plugins with plugin.yml is supported.
 
 The class that inherits the task will be started immediately if you add a public int startNow;
+
+getReflectLoader method
+Regulation: The plugin using the MariataPluginBase as the main class must use mariata.oml
+
+Use of custom hub methods
+
+//this is the main class that inherits MariataPluginBase
+
+this.getReflectLoader(this,(obj,clz)->{
+
+/ / Object processing
+
+If(obj instanceof xxx){
+
+Object processing
+
+}
+
+},new String[]{root package name});
+After using this method, all objects will be loaded here, and all objects can be loaded in lambada expressions.
+
+Such as: processing all objects that inherit AAA class
+
+
+this.getReflectLoader(this,(obj,clz)->{
+
+/ / Object processing
+
+If(obj instanceof AAA){
+
+
+
+}
+
+},new String[]{root package name});
