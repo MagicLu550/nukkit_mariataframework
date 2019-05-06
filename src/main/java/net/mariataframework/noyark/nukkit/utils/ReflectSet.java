@@ -108,7 +108,6 @@ public class ReflectSet {
 								obj = clz.newInstance();
 								creater.create(obj,clz);
 							}catch (Exception e){
-								Message.println("can not load private constructor");
 							}
 						}
 					}

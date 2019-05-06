@@ -5,17 +5,18 @@ import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import net.mariataframework.noyark.nukkit.manager.BeanManager;
 import net.mariataframework.noyark.nukkit.manager.PluginManager;
+import net.mariataframework.noyark.nukkit.plugin.MariataClassLoader;
 import net.mariataframework.noyark.nukkit.utils.Message;
 import net.mariataframework.noyark.nukkit.utils.UnJar;
 
 import java.io.File;
 
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- *
  * marita-framework是一款基于Nukkit的解藕框架，该框架可以
  * 控制反转的创建javabean对象，不需要开发者手动创建一些对象
  */
@@ -70,18 +71,20 @@ public class FrameworkCore extends PluginBase {
                         pluginInstance.add((PluginBase)o);
                     }
                 }
+                int start = 0;
+                for(PluginBase base:pluginInstance){
+                    base.init(this.getPluginLoader(),this.getServer(),this.getDescription(),new File(this.getDataFolder()+"/"+ PluginManager.getManager().getPlugins().get(start)),this.getFile());
+                    start++;
+                }
                 for(PluginBase base:pluginInstance){
                     base.getClass().getMethod("onLoad").invoke(base);
                 }
             }catch (Exception e){
                 e.printStackTrace();
             }
-            int start = 0;
+
             for(PluginBase base:pluginInstance){
-                base.init(this.getPluginLoader(),this.getServer(),this.getDescription(),new File(this.getDataFolder()+"/"+ PluginManager.getManager().getPlugins().get(start)),this.getFile());
-                start++;
-            }
-            for(PluginBase base:pluginInstance){
+                base.setEnabled(true);
                 base.getClass().getMethod("onEnable").invoke(base);
             }
         }catch (Exception e){
@@ -100,9 +103,14 @@ public class FrameworkCore extends PluginBase {
             for(String jar:jars){
                 UnJar.clean(jar);
             }
+            for(URLClassLoader classLoader: MariataClassLoader.getClassLoader().getLoaders()){
+                Message.println("close the class loader");
+                classLoader.close();
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
+
     }
     public static FrameworkCore getInstance(){
         return frameworkCore;

@@ -16,12 +16,15 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MariataClassLoader implements MariataLoader{
 
     private static MariataClassLoader mcl;
+
+    private List<URLClassLoader> loaders = new ArrayList<>();
 
 
     static{
@@ -52,7 +55,7 @@ public class MariataClassLoader implements MariataLoader{
         String name = file.getName().substring(0,file.getName().indexOf(".jar"));
 
         String dirFile = base.getDataFolder()+"/plugin/"+name;
-        
+
 
         UnJar.decompress(file.getPath(),dirFile+"/");
         if(!isDefault){
@@ -72,7 +75,7 @@ public class MariataClassLoader implements MariataLoader{
                 throw new ClassNotFoundException("no class: main");
 
             }
-            classLoader.close();
+
         }else{
             //TODO 读取普通插件
             /*
@@ -86,8 +89,12 @@ public class MariataClassLoader implements MariataLoader{
             });
             PluginManager.getManager().getJars().add(dirFile+"/");
         }
+        loaders.add(classLoader);
     }
 
+    public List<URLClassLoader> getLoaders(){
+        return loaders;
+    }
 
     private void load(MariataOmlVO mariataOmlVO,String dirFile,PluginManager manager,URLClassLoader classLoader,String name) throws Exception{
 
