@@ -50,8 +50,10 @@ startbefore:
 
 Currently loading plugins with plugin.yml is supported.
 
-The class that inherits the task will be started immediately if you add a public int startNow;
-
+The class that inherits the task will be started immediately if you add a 
+```
+public int startNow;
+```
 getReflectLoader method
 Regulation: The plugin using the MariataPluginBase as the main class must use mariata.oml
 
