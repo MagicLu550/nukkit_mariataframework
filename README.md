@@ -47,3 +47,10 @@ startbefore:
   -
   -
 ```
+
+目前支持加载带有plugin.yml的插件
+
+继承Task的类如果添加一个
+public int startNow;
+就会被立即启动
+

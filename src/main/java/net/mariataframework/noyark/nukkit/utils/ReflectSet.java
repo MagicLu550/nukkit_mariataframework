@@ -71,14 +71,13 @@ public class ReflectSet {
 	 * configuration file,and generate a configuration file object
 	 */
 	
-	public void loadAnnotation(URLClassLoader loader, String name, ReflectCreate creater) {
+	public void loadAnnotation(ClassLoader loader, String name, ReflectCreate creater) {
 		try {
 			scanPackage(loader,name,creater);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 	/**
 	 * Its role is to further parse
 	 * the obtained class and resolve it to
@@ -89,7 +88,7 @@ public class ReflectSet {
 	 * @throws ClassNotFoundException
 	 * @throws InstantiationException
 	 */
-	private void scanPackage(URLClassLoader loader, String name, ReflectCreate creater) throws IllegalArgumentException, IllegalAccessException,ClassNotFoundException, InstantiationException,NotImplementListenerException{
+	private void scanPackage(ClassLoader loader, String name, ReflectCreate creater) throws IllegalArgumentException, IllegalAccessException,ClassNotFoundException, InstantiationException,NotImplementListenerException{
 	    String classPath = classpath;
 		for(String packageFile:packageFiles){
 			String packagePath = classPath+packageFile.replaceAll("\\.","/");
