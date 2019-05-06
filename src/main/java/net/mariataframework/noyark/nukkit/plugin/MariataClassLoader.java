@@ -18,9 +18,11 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 
+
 public class MariataClassLoader implements MariataLoader{
 
     private static MariataClassLoader mcl;
+
 
     static{
         mcl = new MariataClassLoader();
@@ -28,6 +30,7 @@ public class MariataClassLoader implements MariataLoader{
 
     private MariataClassLoader(){
     }
+
 
     public static MariataLoader getClassLoader(){
         return mcl;

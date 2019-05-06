@@ -4,6 +4,7 @@ package net.mariataframework.noyark.nukkit.manager;
 import cn.nukkit.command.Command;
 import cn.nukkit.event.Listener;
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.scheduler.Task;
 import net.mariataframework.noyark.nukkit.core.FrameworkCore;
 import net.mariataframework.noyark.nukkit.utils.Message;
 import net.mariataframework.noyark.nukkit.utils.ReflectSet;
@@ -13,12 +14,16 @@ import net.mariataframework.noyark.nukkit.plugin.MariataClassLoader;
 import java.io.File;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class PluginManager implements JarManager{
 
     private static PluginManager manager;
+
+    public  Map<Class<?>,Object> instances = new HashMap<>();
 
     static {
         manager = new PluginManager();
@@ -65,7 +70,12 @@ public class PluginManager implements JarManager{
     public void loadClass(Object obj,Class<?> clz){
         Message.loading(obj.getClass().getName(),obj.getClass());
         if(obj instanceof Listener){
-            FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener) obj,FrameworkCore.getInstance());
+            try{
+                FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener) obj,FrameworkCore.getInstance());
+                instances.put(obj.getClass(),obj);
+            }catch (IllegalStateException e){
+                Message.println(e.getMessage());
+            }
         }
         if(obj instanceof Command){
             try{
@@ -73,7 +83,23 @@ public class PluginManager implements JarManager{
             }catch (NoSuchMethodException e){
                 FrameworkCore.getInstance().getServer().getCommandMap().register("",(Command)obj);
             }
+            instances.put(obj.getClass(),obj);
         }
+        if(obj instanceof Task){
+            try{
+                clz.getDeclaredField("startNow");
+                FrameworkCore.getInstance().getServer().getScheduler().scheduleTask((Task)obj);
+                instances.put(obj.getClass(),obj);
+            }catch (NoSuchFieldException e){}
+        }
+        if(obj instanceof Runnable){
+            try{
+                clz.getDeclaredField("startNow");
+                FrameworkCore.getInstance().getServer().getScheduler().scheduleTask(FrameworkCore.getInstance(),(Runnable) obj);
+                instances.put(obj.getClass(),obj);
+            }catch (NoSuchFieldException e){}
+        }
+
     }
     public List<String> getJars(){
         return jars;
