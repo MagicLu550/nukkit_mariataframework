@@ -19,7 +19,6 @@ package net.mariataframework.noyark.nukkit.utils;
 import net.mariataframework.noyark.nukkit.exception.NotImplementListenerException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +69,7 @@ public class ReflectSet {
 	
 	public void loadAnnotation(ClassLoader loader, String name, ReflectCreate creater) {
 		try {
+
 			scanPackage(loader,name,creater);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,7 +81,6 @@ public class ReflectSet {
 	 * an instance; 
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
-	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 * @throws InstantiationException
 	 */

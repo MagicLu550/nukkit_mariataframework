@@ -4,7 +4,6 @@ package net.mariataframework.noyark.nukkit.core;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import net.mariataframework.noyark.nukkit.manager.PluginManager;
-import net.mariataframework.noyark.nukkit.plugin.MariataClassLoader;
 import net.mariataframework.noyark.nukkit.utils.Message;
 import net.mariataframework.noyark.nukkit.utils.UnJar;
 
