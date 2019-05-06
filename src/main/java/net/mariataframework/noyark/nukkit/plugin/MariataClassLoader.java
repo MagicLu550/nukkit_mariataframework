@@ -52,8 +52,7 @@ public class MariataClassLoader implements MariataLoader{
         String name = file.getName().substring(0,file.getName().indexOf(".jar"));
 
         String dirFile = base.getDataFolder()+"/plugin/"+name;
-
-        new File(dirFile).mkdir();
+        
 
         UnJar.decompress(file.getPath(),dirFile+"/");
         if(!isDefault){
