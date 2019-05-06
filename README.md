@@ -10,7 +10,7 @@ According to the specified root package, the automatic registration of the liste
 ```
 
 * Decoupling: This means separating the main class from the registration class, making them completely independent
-* Container: This refers to the framework as a container for the plugin. Note that the framework does not provide an api
+* Container: This refers to the framework as a container for the plugin.
 
 In addition, the mariata framework supports a new plugin structure, the file directory is under plugins/mariataframework/plugin/
 Deploy the built jar package here.
