@@ -27,7 +27,6 @@ public class MariataClassLoader implements MariataLoader{
     }
 
     private MariataClassLoader(){
-
     }
 
     public static MariataLoader getClassLoader(){
@@ -36,7 +35,7 @@ public class MariataClassLoader implements MariataLoader{
 
     public void loadPlugin(File file, PluginBase base, PluginManager manager,boolean loadClass) throws Exception{
         URL xURL = file.toURI().toURL();
-        URLClassLoader classLoader = new URLClassLoader(new URL[]{xURL});
+        URLClassLoader classLoader = new URLClassLoader(new URL[]{xURL},this.getClass().getClassLoader());
         InputStream in = classLoader.getResourceAsStream("mariata.oml");
         boolean isDefault = false;
         if(in == null){
