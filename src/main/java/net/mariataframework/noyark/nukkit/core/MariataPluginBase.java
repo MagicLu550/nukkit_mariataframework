@@ -15,7 +15,7 @@ public class MariataPluginBase extends PluginBase {
 
 
 
-    public void getRefelectLoader(PluginBase base,ClassLoader loader, ReflectCreate create,String... rootPackage){
+    public void getReflectLoader(PluginBase base, ReflectCreate create,String... rootPackage){
 
         try{
             //TODO

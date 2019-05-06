@@ -3,6 +3,7 @@ package net.mariataframework.noyark.nukkit.manager;
 
 import cn.nukkit.command.Command;
 import cn.nukkit.event.Listener;
+import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.scheduler.Task;
 import net.mariataframework.noyark.nukkit.core.FrameworkCore;
@@ -61,15 +62,14 @@ public class PluginManager implements JarManager{
     }
 
     public void loadClasses(String[] rootPackage, String dirFile, URLClassLoader loader, String name) {
-
+        Message.loading(name, Plugin.class);
         new ReflectSet(rootPackage, dirFile).loadAnnotation(loader, name,(obj,clz)-> {
             PluginManager.getManager().loadClass(obj,clz);
         });
     }
 
     public void loadClass(Object obj,Class<?> clz){
-        Message.loading(obj.getClass().getName(),obj.getClass());
-        if(obj instanceof Listener){
+        if(obj instanceof Listener&&instances.get(obj.getClass())==null){
             try{
                 FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener) obj,FrameworkCore.getInstance());
                 instances.put(obj.getClass(),obj);
@@ -77,7 +77,7 @@ public class PluginManager implements JarManager{
                 Message.println(e.getMessage());
             }
         }
-        if(obj instanceof Command){
+        if(obj instanceof Command&&instances.get(obj.getClass())==null){
             try{
                 FrameworkCore.getInstance().getServer().getCommandMap().register(clz.getDeclaredMethod("setPrefix").toString(),(Command)obj);
             }catch (NoSuchMethodException e){
@@ -85,14 +85,14 @@ public class PluginManager implements JarManager{
             }
             instances.put(obj.getClass(),obj);
         }
-        if(obj instanceof Task){
+        if(obj instanceof Task&&instances.get(obj.getClass())==null){
             try{
                 clz.getDeclaredField("startNow");
                 FrameworkCore.getInstance().getServer().getScheduler().scheduleTask((Task)obj);
                 instances.put(obj.getClass(),obj);
             }catch (NoSuchFieldException e){}
         }
-        if(obj instanceof Runnable){
+        if(obj instanceof Runnable&&instances.get(obj.getClass())==null){
             try{
                 clz.getDeclaredField("startNow");
                 FrameworkCore.getInstance().getServer().getScheduler().scheduleTask(FrameworkCore.getInstance(),(Runnable) obj);

@@ -85,7 +85,6 @@ public class FrameworkCore extends PluginBase {
 
             for(PluginBase base:pluginInstance){
                 base.setEnabled(true);
-                base.getClass().getMethod("onEnable").invoke(base);
             }
         }catch (Exception e){
             e.printStackTrace();

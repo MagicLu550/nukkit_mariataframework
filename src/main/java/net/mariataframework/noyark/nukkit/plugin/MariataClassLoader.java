@@ -67,7 +67,6 @@ public class MariataClassLoader implements MariataLoader{
 
             }
             if(!mariataOmlVO.getRootClass().equals("")){
-
                 manager.getMainClass().add(classLoader.loadClass(mariataOmlVO.getRootClass()));
 
             }else{
@@ -84,6 +83,7 @@ public class MariataClassLoader implements MariataLoader{
 
             Plugin pluginBase = base.getPluginLoader().loadPlugin(file);
             String packageName = pluginBase.getClass().getPackage().getName();
+
             new ReflectSet(new String[]{packageName.substring(0,packageName.indexOf(".")==-1?packageName.length():packageName.indexOf("."))},dirFile+"/").loadAnnotation(pluginBase.getClass().getClassLoader(),pluginBase.getName(),(obj,clz)->{
                 PluginManager.getManager().loadClass(obj,clz);
             });

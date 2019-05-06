@@ -1,5 +1,5 @@
 name: mariataframework
-version: 0.6.0
+version: 0.7.0
 main: net.mariataframework.noyark.nukkit.core.FrameworkCore
 api: [1.0.8]
 description: The nukkit framework
