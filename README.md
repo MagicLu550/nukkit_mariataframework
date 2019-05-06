@@ -2,7 +2,7 @@
 [![zh](https://img.shields.io/badge/readme-chinese-orange.svg)](README.md)
 
 # nukkit_mariataframework
-`nukkit framwork`
+`nukkit framework`
 
 ```
 After using this framework, if you use the new plugin structure provided by the framework, the listener (implementing the Listener interface) and the command (inherited from the Command parent class) will be registered as the default object by the framework.
