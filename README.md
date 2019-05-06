@@ -1,5 +1,5 @@
 ![LICENSE](https://img.shields.io/badge/license-GPL-blue.svg)
-[![zh](https://img.shields.io/badge/readme-chinese-orange.svg)](README.md)
+[![zh](https://img.shields.io/badge/readme-chinese-orange.svg)](README_CN.md)
 
 # nukkit_mariataframework
 `nukkit framework`
