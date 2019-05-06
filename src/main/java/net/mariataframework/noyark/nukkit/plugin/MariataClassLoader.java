@@ -17,7 +17,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MariataClassLoader implements MariataLoader{
@@ -26,6 +28,7 @@ public class MariataClassLoader implements MariataLoader{
 
     private List<URLClassLoader> loaders = new ArrayList<>();
 
+    private Map<Class<?>,String> plugin_fileName = new HashMap<>();
 
     static{
         mcl = new MariataClassLoader();
@@ -67,7 +70,9 @@ public class MariataClassLoader implements MariataLoader{
 
             }
             if(!mariataOmlVO.getRootClass().equals("")){
-                manager.getMainClass().add(classLoader.loadClass(mariataOmlVO.getRootClass()));
+                Class<?> pluginClass = classLoader.loadClass(mariataOmlVO.getRootClass());
+                manager.getMainClass().add(pluginClass);
+                plugin_fileName.put(pluginClass,name);
 
             }else{
 
@@ -94,6 +99,10 @@ public class MariataClassLoader implements MariataLoader{
 
     public List<URLClassLoader> getLoaders(){
         return loaders;
+    }
+
+    public Map<Class<?>,String> getPlugin_fileName(){
+        return plugin_fileName;
     }
 
     private void load(MariataOmlVO mariataOmlVO,String dirFile,PluginManager manager,URLClassLoader classLoader,String name) throws Exception{

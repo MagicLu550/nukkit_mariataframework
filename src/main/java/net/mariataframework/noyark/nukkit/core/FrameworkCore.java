@@ -68,6 +68,10 @@ public class FrameworkCore extends PluginBase {
                 for(Class<?> clz: PluginManager.getManager().getMainClass()){
                     Object o = clz.newInstance();
                     if(o instanceof PluginBase) {
+                        if(o instanceof MariataPluginBase){
+                            String name = MariataClassLoader.getClassLoader().getPlugin_fileName().get(o.getClass());
+                            ((MariataPluginBase) o).setJarFileName(name);
+                        }
                         pluginInstance.add((PluginBase)o);
                     }
                 }

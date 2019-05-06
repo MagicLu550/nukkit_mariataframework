@@ -12,20 +12,26 @@ import java.io.InputStream;
 
 public class MariataPluginBase extends PluginBase {
 
+    private String jarFileName;
 
+    public String getJarFileName() {
+        return jarFileName;
+    }
 
+    public void setJarFileName(String jarFileName) {
+        this.jarFileName = jarFileName;
+    }
 
-    public void getReflectLoader(PluginBase base, ReflectCreate create,String... rootPackage){
+    public void getReflectLoader(PluginBase base, ReflectCreate create, String... rootPackage){
 
         try{
-            //TODO
             ClassLoader classLoader = base.getClass().getClassLoader();
             InputStream in = classLoader.getResourceAsStream("mariata.oml");
             if(in == null){
                 return;
             }
             MariataOmlVO vo = OamlManager.getManager().toDoSet(in);
-            new ReflectSet(rootPackage,FrameworkCore.getInstance().getDataFolder()+"/plugin/"+vo.getPluginName()).loadAnnotation(classLoader,vo.getPluginName(),create);
+            new ReflectSet(rootPackage,FrameworkCore.getInstance().getDataFolder()+"/plugin/"+jarFileName+"/").loadAnnotation(classLoader,vo.getPluginName(),create);
         }catch (IOException io){
         }
     }

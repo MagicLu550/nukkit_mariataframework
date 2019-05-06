@@ -20,7 +20,9 @@ import net.mariataframework.noyark.nukkit.exception.NotImplementListenerExceptio
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -40,6 +42,8 @@ import java.util.List;
  */
 
 public class ReflectSet {
+
+	public static Map<Class<?>,Object> objectMap = new HashMap<>();
 
 	/** the package file*/
 	private String[] packageFiles;
@@ -69,7 +73,6 @@ public class ReflectSet {
 	
 	public void loadAnnotation(ClassLoader loader, String name, ReflectCreate creater) {
 		try {
-
 			scanPackage(loader,name,creater);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -100,14 +103,20 @@ public class ReflectSet {
 					for(File f1:fs) {
 						if(f1.getName().endsWith(".class")) {
 							String classpath = f1.getPath();
-							classpath = classpath.substring(classpath.indexOf("classes")+"classes".length()+1,classpath.indexOf(".class")).replaceAll("/|\\\\",".");
-							String real = classpath.substring(classPath.indexOf("mariataframework")+("mariataframework"+name).length()+2).trim();
-							Class<?> clz = loader.loadClass(real);
-							Object obj;
-							try{
-								obj = clz.newInstance();
-								creater.create(obj,clz);
-							}catch (Exception e){
+							classpath = classpath.substring(classPath.length());
+							classpath = classpath.replaceAll("/|\\\\",".").replace(".class","");
+							Class<?> clz = loader.loadClass(classpath);
+							if(!clz.getName().startsWith("net.mariataframework.noyark.nukkit")){
+								Object obj;
+								try{
+									if(objectMap.get(clz)==null){
+										obj = clz.newInstance();
+									}else{
+										obj = objectMap.get(clz);
+									}
+									creater.create(obj,clz);
+								}catch (Exception e){
+								}
 							}
 						}
 					}
