@@ -10,6 +10,7 @@ import net.noyark.oaml.tree.Document;
 import net.noyark.oaml.tree.Node;
 
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
@@ -47,7 +48,15 @@ public class MCompoundTagMap implements TagMap{
 
 
     public MCompoundTagMap(String name){
-        FILE = FrameworkCore.getInstance().getDataFolder()+"/tag+"+name+"+/ItemTag.tag";
+        FILE = FrameworkCore.getInstance().getDataFolder()+"/tag/"+name;
+        try{
+            File file =new File(FILE);
+            if(!file.exists())
+                file.mkdirs();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     private Map<Tag,StringBuilder> tag_path = new HashMap<>();
@@ -55,7 +64,7 @@ public class MCompoundTagMap implements TagMap{
     public void putCompandTag(Item item,CompoundTag compoundTag){
         try{
             Document document = putCompandTag(item.hashCode()+"",compoundTag,DocumentFactory.getDocument());
-            OamlWriter writer = new OamlWriter(new FileOutputStream(FILE));
+            OamlWriter writer = new OamlWriter(new FileOutputStream(FILE+"/comTag.tag"));
             writer.write(document);
         }catch (IOException e){
             e.printStackTrace();
