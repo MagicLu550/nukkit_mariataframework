@@ -70,19 +70,6 @@ public class FrameworkCore extends PluginBase {
                 frameworkCore = this;
                 Message.start();
                 PluginManager.getManager().start(this,true);
-                for(Class<?> clz: PluginManager.getManager().getMainClass()){
-                    Object o = clz.newInstance();
-                    if(o instanceof PluginBase) {
-                        if(o instanceof MariataPluginBase){
-                            String name = MariataClassLoader.getClassLoader().getPlugin_fileName().get(o.getClass());
-                            ((MariataPluginBase) o).setJarFileName(name);
-                            InputStream in = o.getClass().getClassLoader().getResourceAsStream("mariata.oml");
-                            MariataOmlVO vo = OamlManager.getManager().toDoSet(in);
-                            ((MariataPluginBase) o).setTagMap(new MCompoundTagMap(vo.getPluginName()));
-                        }
-                        pluginInstance.add((PluginBase)o);
-                    }
-                }
                 int start = 0;
                 for(PluginBase base:pluginInstance){
                     base.init(this.getPluginLoader(),this.getServer(),this.getDescription(),new File(this.getDataFolder()+"/"+ PluginManager.getManager().getPlugins().get(start)),this.getFile());
@@ -129,5 +116,9 @@ public class FrameworkCore extends PluginBase {
 
     public BeanManager getBeanManager(){
         return BeanManager.getManager();
+    }
+
+    public static List<PluginBase> getPluginInstance(){
+        return pluginInstance;
     }
 }

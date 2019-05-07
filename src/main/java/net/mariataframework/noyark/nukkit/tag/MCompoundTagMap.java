@@ -43,6 +43,8 @@ public class MCompoundTagMap implements TagMap{
 
     public String FILE;
 
+    public static final String TAG_FILE_NAME = "comTag.tag";
+
     private Map<Item, CompoundTag> tags = new HashMap<>();
 
 
@@ -64,7 +66,7 @@ public class MCompoundTagMap implements TagMap{
     public void putCompandTag(Item item,CompoundTag compoundTag){
         try{
             Document document = putCompandTag(item.hashCode()+"",compoundTag,DocumentFactory.getDocument());
-            OamlWriter writer = new OamlWriter(new FileOutputStream(FILE+"/comTag.tag"));
+            OamlWriter writer = new OamlWriter(new FileOutputStream(FILE+"/"+TAG_FILE_NAME));
             writer.write(document);
         }catch (IOException e){
             e.printStackTrace();
@@ -118,7 +120,7 @@ public class MCompoundTagMap implements TagMap{
         try{
 
             OamlReader reader = new OamlReader();
-            Document document = reader.read(FILE);
+            Document document = reader.read(FILE+"/"+TAG_FILE_NAME);
             List<Node> tagNodes = document.getEntry(item.hashCode()+"").getSons();
 
             List<Node> typeNodes = document.getEntry("TYPE"+item.hashCode()+"").getSons();

@@ -51,7 +51,8 @@ public class PluginManager implements JarManager{
         if(jarFile!=null){
             for(File file:jarFile){
                 if(file.getName().endsWith(".jar")){
-                   this.loadingPlugins(file,base,loadClass);
+                    this.getJars().add(file.toString().replace(".jar",""));
+                    this.loadingPlugins(file,base,loadClass);
                 }
             }
         }
@@ -69,7 +70,7 @@ public class PluginManager implements JarManager{
     }
 
     public void loadClass(Object obj,Class<?> clz){
-        if(obj instanceof Listener&&instances.get(obj.getClass())==null){
+        if(!(obj instanceof PluginBase)&&obj instanceof Listener&&instances.get(obj.getClass())==null){
             try{
                 FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener) obj,FrameworkCore.getInstance());
                 instances.put(obj.getClass(),obj);

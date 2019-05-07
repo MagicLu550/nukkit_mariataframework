@@ -1,9 +1,13 @@
 package net.mariataframework.noyark.nukkit.plugin;
 
 
+import cn.nukkit.event.Listener;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
+import net.mariataframework.noyark.nukkit.core.FrameworkCore;
+import net.mariataframework.noyark.nukkit.core.MariataPluginBase;
+import net.mariataframework.noyark.nukkit.tag.MCompoundTagMap;
 import net.mariataframework.noyark.nukkit.utils.Message;
 import net.mariataframework.noyark.nukkit.manager.OamlManager;
 import net.mariataframework.noyark.nukkit.manager.PluginManager;
@@ -12,6 +16,7 @@ import net.mariataframework.noyark.nukkit.utils.UnJar;
 import net.mariataframework.noyark.nukkit.exception.NoConfigException;
 import net.mariataframework.noyark.nukkit.vo.MariataOmlVO;
 
+import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -64,19 +69,30 @@ public class MariataClassLoader implements MariataLoader{
         if(!isDefault){
 
             MariataOmlVO mariataOmlVO = OamlManager.getManager().toDoSet(in);
-            if(loadClass) {
 
-                load(mariataOmlVO, dirFile, manager, classLoader, name);
-
-            }
             if(!mariataOmlVO.getRootClass().equals("")){
                 Class<?> pluginClass = classLoader.loadClass(mariataOmlVO.getRootClass());
                 manager.getMainClass().add(pluginClass);
+                Object o = pluginClass.newInstance();
+                if(o instanceof PluginBase) {
+                    if (o instanceof MariataPluginBase) {
+                        ((MariataPluginBase) o).setJarFileName(name);
+                        ((MariataPluginBase) o).setTagMap(new MCompoundTagMap(mariataOmlVO.getPluginName()));
+                    }
+                    if(o instanceof Listener){
+                        FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener)o,FrameworkCore.getInstance());
+                    }
+                    FrameworkCore.getPluginInstance().add((PluginBase)o);
+                }
                 plugin_fileName.put(pluginClass,name);
-
             }else{
 
                 throw new ClassNotFoundException("no class: main");
+
+            }
+            if(loadClass) {
+
+                load(mariataOmlVO, dirFile, manager, classLoader, name);
 
             }
 
