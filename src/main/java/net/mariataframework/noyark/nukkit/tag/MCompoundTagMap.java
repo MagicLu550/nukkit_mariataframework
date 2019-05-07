@@ -2,6 +2,7 @@ package net.mariataframework.noyark.nukkit.tag;
 
 import cn.nukkit.item.Item;
 import cn.nukkit.nbt.tag.*;
+import net.mariataframework.noyark.nukkit.core.FrameworkCore;
 import net.noyark.oaml.DocumentFactory;
 import net.noyark.oaml.OamlReader;
 import net.noyark.oaml.OamlWriter;
@@ -46,8 +47,7 @@ public class MCompoundTagMap implements TagMap{
 
 
     public MCompoundTagMap(String name){
-        FILE = "test.oml";
-        //FILE = FrameworkCore.getInstance().getDataFolder()+"/tag+"+name+"+/ItemTag.tag";
+        FILE = FrameworkCore.getInstance().getDataFolder()+"/tag+"+name+"+/ItemTag.tag";
     }
 
     private Map<Tag,StringBuilder> tag_path = new HashMap<>();

@@ -44,9 +44,7 @@ public class MariataPluginBase extends PluginBase {
             }
             MariataOmlVO vo = OamlManager.getManager().toDoSet(in);
             new ReflectSet(rootPackage,FrameworkCore.getInstance().getDataFolder()+"/plugin/"+jarFileName+"/").loadAnnotation(classLoader,vo.getPluginName(),create);
-        }catch (IOException io){
-        }
+        }catch (IOException io){}
     }
-
 
 }

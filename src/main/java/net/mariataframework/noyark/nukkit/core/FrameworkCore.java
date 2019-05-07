@@ -62,8 +62,7 @@ public class FrameworkCore extends PluginBase {
             e.printStackTrace();
         }
     }
-    //TODO 暂时还没解决OnLoad方法问题，待解决方案
-    //在第一次加载时保留ClassLoader，第二次调用后再释放
+
     @Override
     public void onEnable(){
         try{
