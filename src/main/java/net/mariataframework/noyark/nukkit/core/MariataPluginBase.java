@@ -2,6 +2,8 @@ package net.mariataframework.noyark.nukkit.core;
 
 import cn.nukkit.plugin.PluginBase;
 import net.mariataframework.noyark.nukkit.manager.OamlManager;
+import net.mariataframework.noyark.nukkit.tag.MCompoundTagMap;
+import net.mariataframework.noyark.nukkit.tag.TagMap;
 import net.mariataframework.noyark.nukkit.utils.ReflectCreate;
 import net.mariataframework.noyark.nukkit.utils.ReflectSet;
 import net.mariataframework.noyark.nukkit.vo.MariataOmlVO;
@@ -14,12 +16,22 @@ public class MariataPluginBase extends PluginBase {
 
     private String jarFileName;
 
+    private TagMap TagMap;
+
     public String getJarFileName() {
         return jarFileName;
     }
 
     public void setJarFileName(String jarFileName) {
         this.jarFileName = jarFileName;
+    }
+
+    public net.mariataframework.noyark.nukkit.tag.TagMap getTagMap() {
+        return TagMap;
+    }
+
+    public void setTagMap(net.mariataframework.noyark.nukkit.tag.TagMap tagMap) {
+        TagMap = tagMap;
     }
 
     public void getReflectLoader(PluginBase base, ReflectCreate create, String... rootPackage){
@@ -35,5 +47,6 @@ public class MariataPluginBase extends PluginBase {
         }catch (IOException io){
         }
     }
+
 
 }

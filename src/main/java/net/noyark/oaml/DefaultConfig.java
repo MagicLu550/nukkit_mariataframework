@@ -124,7 +124,7 @@ public class DefaultConfig implements OamlConfig{
 		List<Node> parentNode = getNode(parentPath).getSons();
 		for(Node node:parentNode) {
 			if(node.getString().startsWith("[(")){
-					map.put(node.getName(),node.getString());
+				map.put(node.getName(),node.getString());
 			}else if(node.isArray()) {
 				map.put(node.getName(), node.getArray());
 			}else {

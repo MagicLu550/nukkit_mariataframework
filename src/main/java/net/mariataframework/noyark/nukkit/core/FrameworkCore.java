@@ -4,16 +4,22 @@ package net.mariataframework.noyark.nukkit.core;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import net.mariataframework.noyark.nukkit.manager.BeanManager;
+import net.mariataframework.noyark.nukkit.manager.OamlManager;
 import net.mariataframework.noyark.nukkit.manager.PluginManager;
 import net.mariataframework.noyark.nukkit.plugin.MariataClassLoader;
+import net.mariataframework.noyark.nukkit.tag.MCompoundTagMap;
 import net.mariataframework.noyark.nukkit.utils.Message;
 import net.mariataframework.noyark.nukkit.utils.UnJar;
+import net.mariataframework.noyark.nukkit.vo.MariataOmlVO;
 
 import java.io.File;
 
+import java.io.InputStream;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 
 /**
@@ -71,6 +77,9 @@ public class FrameworkCore extends PluginBase {
                         if(o instanceof MariataPluginBase){
                             String name = MariataClassLoader.getClassLoader().getPlugin_fileName().get(o.getClass());
                             ((MariataPluginBase) o).setJarFileName(name);
+                            InputStream in = o.getClass().getClassLoader().getResourceAsStream("mariata.oml");
+                            MariataOmlVO vo = OamlManager.getManager().toDoSet(in);
+                            ((MariataPluginBase) o).setTagMap(new MCompoundTagMap(vo.getPluginName()));
                         }
                         pluginInstance.add((PluginBase)o);
                     }
