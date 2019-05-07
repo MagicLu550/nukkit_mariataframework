@@ -55,6 +55,7 @@ public class MCompoundTagMap implements TagMap{
             File file =new File(FILE);
             if(!file.exists())
                 file.mkdirs();
+            new File(FILE+"/"+TAG_FILE_NAME).createNewFile();
         }catch (Exception e){
             e.printStackTrace();
         }
