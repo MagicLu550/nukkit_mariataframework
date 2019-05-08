@@ -259,12 +259,25 @@ public class MCompoundTagMap implements TagMap{
                 tag.add(listTag);
                 break;
             case TAG_String:
+                tag.add(new StringTag(tagNode.getName(),tagNode.getValue()));
                 break;
             case TAG_Long:
+                tag.add(new LongTag(tagNode.getName(),Long.parseLong(tagNode.getValue())));
                 break;
             case TAG_Double:
+                tag.add(new DoubleTag(tagNode.getName(),Double.parseDouble(tagNode.getValue())));
                 break;
             case TAG_Compound:
+                List<Node> tagCompoundChilds = tagNode.getSons();
+                List<Node> typeCompoundNodes = typeNode.getSons();
+                CompoundTag ctag = new CompoundTag(tagNode.getName());
+                int z = 0;
+                for(Node node:tagCompoundChilds){
+                    Node type = typeCompoundNodes.get(z);
+                    putTag(type,node,ctag);
+                    z++;
+                }
+                tag.add(ctag);
                 break;
         }
     }
