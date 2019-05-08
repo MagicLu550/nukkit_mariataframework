@@ -6,6 +6,7 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.scheduler.Task;
+import net.mariataframework.noyark.nukkit.annotations.StartNow;
 import net.mariataframework.noyark.nukkit.core.FrameworkCore;
 import net.mariataframework.noyark.nukkit.utils.Message;
 import net.mariataframework.noyark.nukkit.utils.ReflectSet;
@@ -87,18 +88,16 @@ public class PluginManager implements JarManager{
             instances.put(obj.getClass(),obj);
         }
         if(obj instanceof Task&&instances.get(obj.getClass())==null){
-            try{
-                clz.getDeclaredField("startNow");
+            if(clz.getDeclaredAnnotation(StartNow.class)!=null){
                 FrameworkCore.getInstance().getServer().getScheduler().scheduleTask((Task)obj);
                 instances.put(obj.getClass(),obj);
-            }catch (NoSuchFieldException e){}
+            }
         }
         if(obj instanceof Runnable&&instances.get(obj.getClass())==null){
-            try{
-                clz.getDeclaredField("startNow");
+            if(clz.getDeclaredAnnotation(StartNow.class)!=null){
                 FrameworkCore.getInstance().getServer().getScheduler().scheduleTask(FrameworkCore.getInstance(),(Runnable) obj);
                 instances.put(obj.getClass(),obj);
-            }catch (NoSuchFieldException e){}
+            }
         }
 
     }
