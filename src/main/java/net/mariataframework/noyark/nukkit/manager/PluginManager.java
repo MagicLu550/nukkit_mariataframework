@@ -6,6 +6,7 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.scheduler.Task;
+import net.mariataframework.noyark.nukkit.annotations.FallBackPrefix;
 import net.mariataframework.noyark.nukkit.annotations.StartNow;
 import net.mariataframework.noyark.nukkit.core.FrameworkCore;
 import net.mariataframework.noyark.nukkit.utils.Message;
@@ -80,11 +81,12 @@ public class PluginManager implements JarManager{
             }
         }
         if(obj instanceof Command&&instances.get(obj.getClass())==null){
-            try{
-                FrameworkCore.getInstance().getServer().getCommandMap().register(clz.getDeclaredMethod("setPrefix").toString(),(Command)obj);
-            }catch (NoSuchMethodException e){
-                FrameworkCore.getInstance().getServer().getCommandMap().register("",(Command)obj);
+            FallBackPrefix fallBackPrefix = clz.getDeclaredAnnotation(FallBackPrefix.class);
+            String prefix = "";
+            if(fallBackPrefix != null){
+                prefix = fallBackPrefix.value();
             }
+            FrameworkCore.getInstance().getServer().getCommandMap().register(prefix,(Command)obj);
             instances.put(obj.getClass(),obj);
         }
         if(obj instanceof Task&&instances.get(obj.getClass())==null){
