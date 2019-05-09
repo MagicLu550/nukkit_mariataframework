@@ -27,7 +27,6 @@ import java.util.Map;
 
 public class MCompoundTagMap implements TagMap{
 
-
     private static final byte TAG_End = 0;
     private static final byte TAG_Byte = 1;
     private static final byte TAG_Short = 2;
@@ -66,7 +65,8 @@ public class MCompoundTagMap implements TagMap{
 
     public void putCompandTag(Item item,CompoundTag compoundTag){
         try{
-            Document document = putCompandTag(item.hashCode()+"",compoundTag,DocumentFactory.getDocument());
+            item.setCustomName(item.getName()+"-"+item.hashCode());
+            Document document = putCompandTag(item.getCustomName(),compoundTag,DocumentFactory.getDocument());
             OamlWriter writer = new OamlWriter(new FileOutputStream(FILE+"/"+TAG_FILE_NAME));
             writer.write(document);
         }catch (IOException e){
@@ -92,9 +92,9 @@ public class MCompoundTagMap implements TagMap{
     private void putTag(Tag tag,Node node,Node nodeTYPE) throws IOException{
 
         //存储标签
-        Node tagNode = node.createNode(tag.getName()==""?tag.hashCode()+"":tag.getName());
+        Node tagNode = node.createNode(tag.getName().equals("")?tag.hashCode()+"":tag.getName());
         //存储类型
-        Node typeNode = nodeTYPE.createNode(tag.getName()==""?tag.hashCode()+"":tag.getName());
+        Node typeNode = nodeTYPE.createNode(tag.getName().equals("")?tag.hashCode()+"":tag.getName());
 
         typeNode.setValue(tag.getId()+"");
         if(tag instanceof CompoundTag){
@@ -116,15 +116,16 @@ public class MCompoundTagMap implements TagMap{
         }
     }
 
+    // O(n)
     public CompoundTag getCompandTag(Item item){
         CompoundTag tag = new CompoundTag();
         try{
 
             OamlReader reader = new OamlReader();
             Document document = reader.read(FILE+"/"+TAG_FILE_NAME);
-            List<Node> tagNodes = document.getEntry(item.hashCode()+"").getSons();
+            List<Node> tagNodes = document.getEntry(item.getCustomName()+"").getSons();
 
-            List<Node> typeNodes = document.getEntry("TYPE"+item.hashCode()+"").getSons();
+            List<Node> typeNodes = document.getEntry("TYPE"+item.getCustomName()+"").getSons();
 
             int start = 0;
             for(Node tagNode:tagNodes){

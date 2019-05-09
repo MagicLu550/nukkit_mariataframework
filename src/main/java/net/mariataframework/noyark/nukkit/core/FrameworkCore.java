@@ -28,6 +28,8 @@ import java.util.List;
  */
 public class FrameworkCore extends PluginBase {
 
+
+
     private static FrameworkCore frameworkCore;
 
     private static List<PluginBase> pluginInstance = new ArrayList<>();

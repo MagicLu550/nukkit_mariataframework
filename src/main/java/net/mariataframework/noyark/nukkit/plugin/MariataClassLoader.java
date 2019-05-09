@@ -16,7 +16,6 @@ import net.mariataframework.noyark.nukkit.utils.UnJar;
 import net.mariataframework.noyark.nukkit.exception.NoConfigException;
 import net.mariataframework.noyark.nukkit.vo.MariataOmlVO;
 
-import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -28,6 +27,7 @@ import java.util.Map;
 
 
 public class MariataClassLoader implements MariataLoader{
+
 
     private static MariataClassLoader mcl;
 
@@ -72,18 +72,11 @@ public class MariataClassLoader implements MariataLoader{
 
             if(!mariataOmlVO.getRootClass().equals("")){
                 Class<?> pluginClass = classLoader.loadClass(mariataOmlVO.getRootClass());
+
                 manager.getMainClass().add(pluginClass);
-                Object o = pluginClass.newInstance();
-                if(o instanceof PluginBase) {
-                    if (o instanceof MariataPluginBase) {
-                        ((MariataPluginBase) o).setJarFileName(name);
-                        ((MariataPluginBase) o).setTagMap(new MCompoundTagMap(mariataOmlVO.getPluginName()));
-                    }
-                    if(o instanceof Listener){
-                        FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener)o,FrameworkCore.getInstance());
-                    }
-                    FrameworkCore.getPluginInstance().add((PluginBase)o);
-                }
+
+                readPluginBase(pluginClass,name,mariataOmlVO);
+
                 plugin_fileName.put(pluginClass,name);
             }else{
 
@@ -97,7 +90,7 @@ public class MariataClassLoader implements MariataLoader{
             }
 
         }else{
-            //TODO 读取普通插件
+
             /*
              *如果是普通插件则读取普通插件
              */
@@ -131,4 +124,17 @@ public class MariataClassLoader implements MariataLoader{
 
     }
 
+    private void readPluginBase(Class<?> pluginClass,String name,MariataOmlVO mariataOmlVO) throws Exception{
+        Object o = pluginClass.newInstance();
+        if(o instanceof PluginBase) {
+            if (o instanceof MariataPluginBase) {
+                ((MariataPluginBase) o).setJarFileName(name);
+                ((MariataPluginBase) o).setTagMap(new MCompoundTagMap(mariataOmlVO.getPluginName()));
+            }
+            if(o instanceof Listener){
+                FrameworkCore.getInstance().getServer().getPluginManager().registerEvents((Listener)o,FrameworkCore.getInstance());
+            }
+            FrameworkCore.getPluginInstance().add((PluginBase)o);
+        }
+    }
 }
